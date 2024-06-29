@@ -1,0 +1,18 @@
+{
+    "name": "ghosty/http-foundation",
+    "description": "Ghosty Http Foundation Component",
+    "type": "package",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Ghosty\\Component\\HttpFoundation\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "AnvilM",
+            "email": "211anvil112@gmail.com"
+        }
+    ],
+    "require": {}
+}
