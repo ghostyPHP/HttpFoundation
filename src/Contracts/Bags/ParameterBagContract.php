@@ -11,4 +11,8 @@ interface ParameterBagContract
     public function set(string $key, mixed $value): void;
 
     public function has(string $key): bool;
+
+    public function replace(array $parameters): void;
+
+    public function remove(string $key): void;
 }

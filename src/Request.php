@@ -24,19 +24,19 @@ use Ghosty\Component\HttpFoundation\Globals\Server;
 
 class Request implements RequestContract
 {
-    public AttributeBagContract $attributes;
+    private AttributeBagContract $attributes;
 
-    public InputBagContract $request;
+    private InputBagContract $request;
 
-    public InputBagContract $query;
+    private InputBagContract $query;
 
-    public FileBagContract $files;
+    private FileBagContract $files;
 
-    public HeaderBagContract $headers;
+    private HeaderBagContract $headers;
 
-    public ServerBagContract $server;
+    private ServerBagContract $server;
 
-    public CookieBagContract $cookies;
+    private CookieBagContract $cookies;
 
 
     private string $baseUrl;
@@ -46,59 +46,143 @@ class Request implements RequestContract
 
     public function __construct()
     {
+        $this->setBags();
+        $this->setFields();
     }
 
 
-    public function create(): RequestContract
+    public static function create(): RequestContract
     {
-        $this->init();
-
-        return $this;
+        return new self;
     }
 
-    private function init()
+
+    private function setFields()
     {
-        $this->setAttributes([]);
-        $this->setQuery();
-        $this->setRequest();
-        $this->setServer();
-        $this->setFiles();
-        $this->setHeaders();
-        $this->setCookies();
+        $this->setBaseUrl(Server::get('SERVER_NAME', 'localhost') . Server::get('SERVER_PORT', '8000'));
+        $this->setBasePath(Server::get('DOCUMENT_ROOT', '/'));
+        $this->setRequestUri(Server::get('REQUEST_URI', '/'));
+        $this->setMethod(Server::get('REQUEST_METHOD', 'GET'));
     }
 
-    private function setAttributes(array $attributes)
+    private function setBags()
     {
-        $this->attributes = new AttributeBag($attributes);
+        $this->setAttributes(new AttributeBag([]));
+        $this->setQuery(new InputBag(Query::all()));
+        $this->setRequest(new InputBag(GlobalsRequest::all()));
+        $this->setServer(new ServerBag(Server::all()));
+        $this->setFiles(new FileBag(Files::all()));
+        $this->setHeaders(new HeaderBag(Headers::all()));
+        $this->setCookies(new CookieBag(Cookies::all()));
     }
 
-    private function setQuery()
+    public function getBasePath(): string
     {
-        $this->query = new InputBag(Query::all());
+        return $this->basePath;
     }
 
-    private function setRequest()
+    public function setBasePath(string $basePath): void
     {
-        $this->request = new InputBag(GlobalsRequest::all());
+        $this->basePath = $basePath;
     }
 
-    private function setServer()
+    public function getBaseUrl(): string
     {
-        $this->server = new ServerBag(Server::all());
+        return $this->baseUrl;
     }
 
-    private function setFiles()
+    public function setBaseUrl(string $baseUrl): void
     {
-        $this->files = new FileBag(Files::all());
+        $this->baseUrl = $baseUrl;
     }
 
-    private function setHeaders()
+    public function getRequestUri(): string
     {
-        $this->headers = new HeaderBag(Headers::all());
+        return $this->requestUri;
     }
 
-    private function setCookies()
+    public function setRequestUri(string $requstUri): void
     {
-        $this->cookies = new CookieBag(Cookies::all());
+        $this->requestUri = $requstUri;
+    }
+
+    public function getMethod(): string
+    {
+        return $this->method;
+    }
+
+    public function setMethod(string $method): void
+    {
+        $this->method = $method;
+    }
+
+    public function getAttributes(): AttributeBagContract
+    {
+        return $this->attributes;
+    }
+
+    public function setAttributes(AttributeBagContract $attributeBag): void
+    {
+        $this->attributes = $attributeBag;
+    }
+
+    public function getRequest(): InputBagContract
+    {
+        return $this->request;
+    }
+
+    public function setRequest(InputBagContract $requestBag): void
+    {
+        $this->request = $requestBag;
+    }
+
+    public function getQuery(): InputBagContract
+    {
+        return $this->query;
+    }
+
+    public function setQuery(InputBagContract $queryBag): void
+    {
+        $this->query = $queryBag;
+    }
+
+    public function getFiles(): FileBagContract
+    {
+        return $this->files;
+    }
+
+    public function setFiles(FileBagContract $fileBag): void
+    {
+        $this->files = $fileBag;
+    }
+
+    public function getHeaders(): HeaderBagContract
+    {
+        return $this->headers;
+    }
+
+    public function setHeaders(HeaderBagContract $headerBag): void
+    {
+        $this->headers = $headerBag;
+    }
+
+    public function getServer(): ServerBagContract
+    {
+        return $this->server;
+    }
+
+    public function setServer(ServerBagContract $serverBag): void
+    {
+        $this->server = $serverBag;
+    }
+
+    public function getCookies(): CookieBagContract
+    {
+        return $this->cookies;
+    }
+
+    public function setCookies(CookieBagContract $cookieBag): void
+    {
+        $this->cookies = $cookieBag;
     }
 }

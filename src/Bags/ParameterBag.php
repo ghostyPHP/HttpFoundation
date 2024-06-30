@@ -36,4 +36,14 @@ abstract class ParameterBag implements ParameterBagContract
     {
         return key_exists($key, $this->parameters);
     }
+
+    public function replace(array $parameters): void
+    {
+        $this->parameters = $parameters;
+    }
+
+    public function remove(string $key): void
+    {
+        unset($this->parameters[$key]);
+    }
 }
